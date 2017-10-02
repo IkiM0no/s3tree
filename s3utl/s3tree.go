@@ -73,7 +73,7 @@ func (nodes TreeNodes) IterTree(showFileAttrs bool) {
 				node.NodeName,
 				)
 			if showFileAttrs {
-				nodeStr = fmt.Sprintf("%s (%d) (%s)",
+				nodeStr = fmt.Sprintf("%s [%d] [%s]",
 					nodeStr,
 					node.Size,
 					node.LastModified.Format("2006-01-02 15:04:05"),
@@ -89,7 +89,7 @@ func (nodes TreeNodes) IterTree(showFileAttrs bool) {
 				stripPath(node.NodeName),
 				)
 			if showFileAttrs {
-				nodeStr = fmt.Sprintf("%s (%d) (%s)",
+				nodeStr = fmt.Sprintf("%s [%d] [%s]",
 					nodeStr,
 					node.Size,
 					node.LastModified.Format("2006-01-02 15:04:05"),
