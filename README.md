@@ -6,7 +6,36 @@ s3tree is a Go implementation of Dem Pilafian's wonderful tree.sh for use with A
 
 Usage example:
 ```
-s3tree -c default -b my-bucket -f my-folder -s
+$ s3tree -c default -b my-bucket -f my-folder -s
+```
+```
+|    |__tree
+|    |    |__file1.txt
+|    |    |__file2.txt
+|    |    |__folder1
+|    |    |    |__file1.txt
+|    |    |    |__nestedfolder1
+|    |    |    |__nestedfolder2
+|    |    |    |    |__file2.txt
+|    |    |    |    |__file3.txt
+|    |    |__folder2
+|    |    |    |__file1.txt
+|    |    |    |__nestedfolder1
+|    |    |    |    |__deepnestedfolder1
+|    |    |    |    |    |__file1.txt
+|    |    |    |    |__file3.txt
+|    |    |__folder3
+|    |    |    |__nestedfolder1
+|    |    |    |    |__file2.txt
+|    |    |    |__nestedfolder2
+|    |    |    |__nestedfolder3
+|    |    |    |    |__deepnestedfolder1
+|    |    |    |    |    |__file1.txt
+|    |    |    |    |__deepnestedfolder2
+|    |    |    |    |    |__file2.txt
+|    |    |    |    |    |__file3.txt
+|    |    |    |    |__file1.txt
+|    |    |    |    |__file2.txt
 ```
 
 Get help:
