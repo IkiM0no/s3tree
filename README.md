@@ -36,6 +36,8 @@ $ s3tree -c default -b my-bucket -f my-folder -s
 |    |    |    |    |    |__file3.txt
 |    |    |    |    |__file1.txt
 |    |    |    |    |__file2.txt
+
+13 directories, 15 files
 ```
 
 Get help:
