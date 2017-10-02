@@ -40,13 +40,14 @@ func FetchNodes(svc *s3.S3, bucket, folder string) (TreeNodes) {
         return Nodes
 }
 
+// Build and print the tree
 func (nodes TreeNodes) IterTree(showFileAttrs bool) {
 	nFolders := 0
 	nFiles   := 0
 	for idx, node := range nodes {
 		var prevNodeName       string
 		var nodeStr            string
-		var deepLeafNestDepth int
+		var deepLeafNestDepth  int
 		if idx > 0 {
 			prevNodeName = nodes[idx -1].NodeName
 		}
