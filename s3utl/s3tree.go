@@ -11,6 +11,9 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
+var reFileNoPath = regexp.MustCompile(`.*/`)
+var rePathNoFile = regexp.MustCompile(`/[^/]*$`)
+
 type TreeNodes []TreeNode
 
 type TreeNode struct {
@@ -106,11 +109,9 @@ func lastNode(inString string) string {
 }
 
 func stripPath(inString string) (string) {
-	reFileNoPath := regexp.MustCompile(`.*/`)
 	return reFileNoPath.ReplaceAllString(inString, "")
 }
 
 func stripFile(inString string) (string) {
-	rePathNoFile := regexp.MustCompile(`/[^/]*$`)
 	return rePathNoFile.ReplaceAllString(inString, "")
 }

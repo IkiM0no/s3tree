@@ -9,7 +9,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
-
 type S3LocalCreds struct {
 	HomeDir       string
 	AwsDir        string `default:"/.aws/credentials"`
