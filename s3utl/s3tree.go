@@ -23,7 +23,7 @@ type TreeNode struct {
 	LastModified time.Time
 }
 
-// Fetch slice of Tree Nodes - convenience wrapper for s3 response.Contents
+// fetch slice of Tree Nodes - convenience wrapper for s3 response.Contents
 func FetchNodes(svc *s3.S3, bucket, folder string) TreeNodes {
 	params := &s3.ListObjectsV2Input{
 		Bucket: aws.String(bucket),
@@ -43,13 +43,13 @@ func FetchNodes(svc *s3.S3, bucket, folder string) TreeNodes {
 	return Nodes
 }
 
-// Build and print the tree
+// build and print the tree
 func (nodes TreeNodes) IterTree(showFileAttrs bool) {
 	nFolders := 0
 	nFiles := 0
+	const indentChar = "|    "
 	for _, node := range nodes {
 		var nodeStr string
-		indentChar := "|    "
 		if node.IsFolder {
 			nFolders += 1
 			nDeep := strings.Count(node.NodeName, "/")

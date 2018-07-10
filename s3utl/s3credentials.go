@@ -1,22 +1,22 @@
 package s3utl
 
 import (
-	"os"
 	"fmt"
+	"os"
 	"reflect"
 
-	"github.com/mitchellh/go-homedir"
 	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/mitchellh/go-homedir"
 )
 
 type S3LocalCreds struct {
-	HomeDir       string
-	AwsDir        string `default:"/.aws/credentials"`
-	Class         string `default:"default"`
+	HomeDir string
+	AwsDir  string `default:"/.aws/credentials"`
+	Class   string `default:"default"`
 }
 
-// Return an AWS credentials object from local ~/.aws/credentials
-func (s S3LocalCreds) Set() (*credentials.Credentials) {
+// return an AWS credentials object from local ~/.aws/credentials
+func (s S3LocalCreds) Set() *credentials.Credentials {
 	typ := reflect.TypeOf(s)
 	if s.Class == "" {
 		z, _ := typ.FieldByName("Class")
@@ -29,7 +29,7 @@ func (s S3LocalCreds) Set() (*credentials.Credentials) {
 	if s.HomeDir == "" {
 		home, err := homedir.Dir()
 		if err != nil {
-			fmt.Println("Err retrieving HomeDir and none provided:", err)
+			fmt.Printf("err retrieving homedir and none provided: %v\n", err.Error)
 			os.Exit(1)
 		}
 		s.HomeDir = home

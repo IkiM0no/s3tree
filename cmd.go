@@ -4,17 +4,17 @@ import (
 	"os"
 	"s3tree/s3utl"
 
-	"github.com/urfave/cli"
-	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/urfave/cli"
 )
 
-var class         string
-var bucket        string
-var folder        string
+var class string
+var bucket string
+var folder string
 var showFileAttrs bool
 var s3Credentials *credentials.Credentials
-var s3Client      *s3.S3
+var s3Client *s3.S3
 
 func main() {
 	app := buildApp()
@@ -23,10 +23,10 @@ func main() {
 
 func buildApp() *cli.App {
 	app := cli.NewApp()
-	app.Name    = "s3tree"
+	app.Name = "s3tree"
 	app.Version = "0.5.2"
-	app.Usage   = "List contents of s3 buckets in a tree-like format."
-	app.Action  = func(c *cli.Context) error {
+	app.Usage = "List contents of s3 buckets in a tree-like format."
+	app.Action = func(c *cli.Context) error {
 		if class == "" {
 			class = "default"
 		}
@@ -37,32 +37,31 @@ func buildApp() *cli.App {
 		s3Client = s3c.Fetch()
 
 		nodes := s3utl.FetchNodes(s3Client, bucket, folder)
-
 		nodes.IterTree(showFileAttrs)
 		return nil
 	}
 	app.Flags = []cli.Flag{
-	        cli.StringFlag{
-	                Name:  "c",
-			Value: "default",
-	                Usage: "-c </.aws/credentials [class]>",
-	                Destination: &class,
-	        },
-	        cli.StringFlag{
-	                Name:  "b",
-	                Usage: "-b <bucket>",
-	                Destination: &bucket,
-	        },
-	        cli.StringFlag{
-	                Name:  "f",
-	                Usage: "-f <folder>",
-	                Destination: &folder,
-	        },
-	        cli.BoolFlag{
-	                Name:  "s",
-	                Usage: "-s | Include file size/date in output",
-	                Destination: &showFileAttrs,
-	        },
+		cli.StringFlag{
+			Name:        "c",
+			Value:       "default",
+			Usage:       "-c </.aws/credentials [class]>",
+			Destination: &class,
+		},
+		cli.StringFlag{
+			Name:        "b",
+			Usage:       "-b <bucket>",
+			Destination: &bucket,
+		},
+		cli.StringFlag{
+			Name:        "f",
+			Usage:       "-f <folder>",
+			Destination: &folder,
+		},
+		cli.BoolFlag{
+			Name:        "s",
+			Usage:       "-s | include file size/date in output",
+			Destination: &showFileAttrs,
+		},
 	}
 	return app
 }
