@@ -54,7 +54,7 @@ func (nodes TreeNodes) IterTree(showFileAttrs bool) {
 			nFolders += 1
 			nDeep := strings.Count(node.NodeName, "/")
 			nodeStr = fmt.Sprintf("%s|__%s",
-				strings.Repeat(indentChar, nDeep),
+				strings.Repeat(indentChar, nDeep-1),
 				Bold(Green(lastNode(node.NodeName))),
 			)
 			fmt.Println(nodeStr)
@@ -62,7 +62,7 @@ func (nodes TreeNodes) IterTree(showFileAttrs bool) {
 			nFiles += 1
 			nDeep := strings.Count(node.NodeName, "/") + 1
 			nodeStr = fmt.Sprintf("%s|__%s",
-				strings.Repeat(indentChar, nDeep),
+				strings.Repeat(indentChar, nDeep-1),
 				stripPath(node.NodeName),
 			)
 			if showFileAttrs {
