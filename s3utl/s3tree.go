@@ -30,7 +30,6 @@ func FetchNodes(svc *s3.S3, bucket, folder string) TreeNodes {
 		Prefix: aws.String(folder),
 	}
 	resp, _ := svc.ListObjectsV2(params)
-	fmt.Println(resp)
 	var Nodes TreeNodes
 	for _, key := range resp.Contents {
 		var Node = TreeNode{
