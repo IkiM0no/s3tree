@@ -45,31 +45,37 @@ func FetchNodes(svc *s3.S3, bucket, folder string) TreeNodes {
 
 // build and print the tree
 func (nodes TreeNodes) IterTree(showFileAttrs bool) {
-	nFolders := 0
-	nFiles := 0
-	const indentChar = "|    "
+	const (
+		indentChar  = "|    "
+		prefixChar  = "%s|__%s"
+		verboseForm = "%s [%d] [%s]"
+		timeFmt     = "2006-01-02 15:04:05"
+	)
+	var (
+		nFolders = 0
+		nFiles   = 0
+	)
 	for _, node := range nodes {
 		var nodeStr string
+		nDeep := strings.Count(node.NodeName, "/")
 		if node.IsFolder {
 			nFolders += 1
-			nDeep := strings.Count(node.NodeName, "/")
-			nodeStr = fmt.Sprintf("%s|__%s",
+			nodeStr = fmt.Sprintf(prefixChar,
 				strings.Repeat(indentChar, nDeep-1),
 				Bold(Green(lastNode(node.NodeName))),
 			)
 			fmt.Println(nodeStr)
 		} else {
 			nFiles += 1
-			nDeep := strings.Count(node.NodeName, "/")
-			nodeStr = fmt.Sprintf("%s|__%s",
+			nodeStr = fmt.Sprintf(prefixChar,
 				strings.Repeat(indentChar, nDeep),
 				stripPath(node.NodeName),
 			)
 			if showFileAttrs {
-				nodeStr = fmt.Sprintf("%s [%d] [%s]",
+				nodeStr = fmt.Sprintf(verboseForm,
 					nodeStr,
 					node.Size,
-					node.LastModified.Format("2006-01-02 15:04:05"),
+					node.LastModified.Format(timeFmt),
 				)
 			}
 			fmt.Println(nodeStr)
