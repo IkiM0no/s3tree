@@ -9,12 +9,14 @@ import (
 	"github.com/urfave/cli"
 )
 
-var class string
-var bucket string
-var folder string
-var showFileAttrs bool
-var s3Credentials *credentials.Credentials
-var s3Client *s3.S3
+var (
+	gClass         string
+	gBucket        string
+	gFolder        string
+	gShowFileAttrs bool
+	gS3Credentials *credentials.Credentials
+	gS3Client      *s3.S3
+)
 
 func main() {
 	app := buildApp()
@@ -24,20 +26,20 @@ func main() {
 func buildApp() *cli.App {
 	app := cli.NewApp()
 	app.Name = "s3tree"
-	app.Version = "0.5.2"
-	app.Usage = "List contents of s3 buckets in a tree-like format."
+	app.Version = "1.1.0"
+	app.Usage = "list contents of s3 buckets in a tree-like format."
 	app.Action = func(c *cli.Context) error {
-		if class == "" {
-			class = "default"
+		if gClass == "" {
+			gClass = "default"
 		}
-		s3LocalCredentials := s3utl.S3LocalCreds{Class: class}
-		s3Credentials = s3LocalCredentials.Set()
+		s3LocalCredentials := s3utl.S3LocalCreds{Class: gClass}
+		gS3Credentials = s3LocalCredentials.Set()
 
-		s3c := s3utl.S3Client{Credentials: s3Credentials}
-		s3Client = s3c.Fetch()
+		s3c := s3utl.S3Client{Credentials: gS3Credentials}
+		gS3Client = s3c.Fetch()
 
-		nodes := s3utl.FetchNodes(s3Client, bucket, folder)
-		nodes.IterTree(showFileAttrs)
+		nodes := s3utl.FetchNodes(gS3Client, gBucket, gFolder)
+		nodes.IterTree(gShowFileAttrs)
 		return nil
 	}
 	app.Flags = []cli.Flag{
@@ -45,22 +47,22 @@ func buildApp() *cli.App {
 			Name:        "c",
 			Value:       "default",
 			Usage:       "-c </.aws/credentials [class]>",
-			Destination: &class,
+			Destination: &gClass,
 		},
 		cli.StringFlag{
 			Name:        "b",
 			Usage:       "-b <bucket>",
-			Destination: &bucket,
+			Destination: &gBucket,
 		},
 		cli.StringFlag{
 			Name:        "f",
 			Usage:       "-f <folder>",
-			Destination: &folder,
+			Destination: &gFolder,
 		},
 		cli.BoolFlag{
 			Name:        "s",
 			Usage:       "-s | include file size/date in output",
-			Destination: &showFileAttrs,
+			Destination: &gShowFileAttrs,
 		},
 	}
 	return app
