@@ -24,12 +24,16 @@ type TreeNode struct {
 }
 
 // fetch slice of Tree Nodes - convenience wrapper for s3 response.Contents
-func FetchNodes(svc *s3.S3, bucket, folder string) TreeNodes {
+func FetchNodes(svc *s3.S3, bucket, folder string) (TreeNodes, error) {
 	params := &s3.ListObjectsV2Input{
 		Bucket: aws.String(bucket),
-		Prefix: aws.String(folder),
+		//Prefix: aws.String(folder),
+		StartAfter: aws.String(folder),
 	}
-	resp, _ := svc.ListObjectsV2(params)
+	resp, err := svc.ListObjectsV2(params)
+	if err != nil {
+		return nil, err
+	}
 	var nodes TreeNodes
 	for _, key := range resp.Contents {
 		var Node = TreeNode{
@@ -40,7 +44,7 @@ func FetchNodes(svc *s3.S3, bucket, folder string) TreeNodes {
 		}
 		nodes = append(nodes, Node)
 	}
-	return nodes
+	return nodes, nil
 }
 
 // build and print the tree

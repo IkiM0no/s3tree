@@ -39,7 +39,10 @@ func buildApp() *cli.App {
 		s3c := s3utl.S3Client{Credentials: gS3Credentials}
 		gS3Client = s3c.Fetch()
 
-		nodes := s3utl.FetchNodes(gS3Client, gBucket, gFolder)
+		nodes, err := s3utl.FetchNodes(gS3Client, gBucket, gFolder)
+		if err != nil {
+			return err
+		}
 		nodes.IterTree(gShowFileAttrs, gDirOnly)
 		return nil
 	}
