@@ -30,7 +30,7 @@ func FetchNodes(svc *s3.S3, bucket, folder string) TreeNodes {
 		Prefix: aws.String(folder),
 	}
 	resp, _ := svc.ListObjectsV2(params)
-	var Nodes TreeNodes
+	var nodes TreeNodes
 	for _, key := range resp.Contents {
 		var Node = TreeNode{
 			NodeName:     *key.Key,
@@ -38,13 +38,13 @@ func FetchNodes(svc *s3.S3, bucket, folder string) TreeNodes {
 			Size:         *key.Size,
 			LastModified: *key.LastModified,
 		}
-		Nodes = append(Nodes, Node)
+		nodes = append(nodes, Node)
 	}
-	return Nodes
+	return nodes
 }
 
 // build and print the tree
-func (nodes TreeNodes) IterTree(showFileAttrs bool) {
+func (nodes TreeNodes) IterTree(showFileAttrs, dirOnly bool) {
 	const (
 		indentChar  = "|    "
 		prefixChar  = "%s|__%s"
@@ -65,7 +65,7 @@ func (nodes TreeNodes) IterTree(showFileAttrs bool) {
 				Bold(Green(lastNode(node.NodeName))),
 			)
 			fmt.Println(nodeStr)
-		} else {
+		} else if !dirOnly {
 			nFiles += 1
 			nodeStr = fmt.Sprintf(prefixChar,
 				strings.Repeat(indentChar, nDeep),

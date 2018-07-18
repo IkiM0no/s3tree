@@ -14,6 +14,7 @@ var (
 	gBucket        string
 	gFolder        string
 	gShowFileAttrs bool
+	gDirOnly       bool
 	gS3Credentials *credentials.Credentials
 	gS3Client      *s3.S3
 )
@@ -39,7 +40,7 @@ func buildApp() *cli.App {
 		gS3Client = s3c.Fetch()
 
 		nodes := s3utl.FetchNodes(gS3Client, gBucket, gFolder)
-		nodes.IterTree(gShowFileAttrs)
+		nodes.IterTree(gShowFileAttrs, gDirOnly)
 		return nil
 	}
 	app.Flags = []cli.Flag{
@@ -63,6 +64,11 @@ func buildApp() *cli.App {
 			Name:        "s",
 			Usage:       "-s | include file size/date in output",
 			Destination: &gShowFileAttrs,
+		},
+		cli.BoolFlag{
+			Name:        "d",
+			Usage:       "-d | include directories only in output",
+			Destination: &gDirOnly,
 		},
 	}
 	return app
